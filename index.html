@@ -1,0 +1,36 @@
+<h1>Manuals</h1>
+
+<p>
+    Hello, and welcome to the manuals of the Butler JCR Website and Intranet. Apologies for the design - we did not expect many people to even use
+    this manual, and we wanted this to be as accessible as possible, hence basic.
+    <br><br>
+    Webmasters are listed <a href="https://www.butlerjcr.com/acknowledgements">here</a>, so if you are stuck, you know who to contact within the university.
+    Alternatively, if you are a new webmaster, and very stuck, you can contact me (Prem) by clicking on the hyperlink and going to my website - finding my LinkedIn / email.
+</p>
+
+<h2>Links</h2>
+
+<p><b>Main Website</b>: <a href="https://www.butlerjcr.com">https://www.butlerjcr.com</a> - basic website, good for freshers or prospective pupils as it contains relevant info for them, without exposing too much.</p>
+<p><b>Intranet</b>: <a href="https://josephine.butlerjcr.com">https://josephine.butlerjcr.com</a> - this is the website with more data - but protected behind a log in wall, you need a Durham CIS code.</p>
+
+<h2>Manual for the Main Website</h2>
+
+<p>This should be self-explanatory, as there is nothing of significance here.</p>
+
+<h2>Manual for the Intranet</h2>
+
+<p>TODO</p>
+
+<h2>Manual for JCR President / FACSO / Webmaster</h2>
+
+If you want to edit the main website, you need GitHub, and be part of <a href="https://github.com/josephinebutlerjcr">the organisation</a>,
+and change the HTML of the pages in the <a href="https://github.com/josephinebutlerjcr/public-website">public website repository</a>.
+The files for these are in the `assets` folder. If you need to add pages on, and you don't know how to code beyond write HTML / edit it, please
+feel free to contact the webmaster (or previous webmasters, for new webmasters).
+
+The only thing that can be editted via the intranet is the president / FACSO bios, as displayed on the front website, and the societies / sports / committees,
+which also can be editted via the intranet.
+
+The intranet is pretty much dynamic. If you have skills in NodeJS, feel free to edit in <a href="https://github.com/josephinebutlerjcr/intranet">the intranet repository</a>,
+noting that `pageCommands` is the directory for the code that does anything for each page (POST, GET) - use examples from other pages if you want to add anything on.
+You can test locally by `npm install` and `node local.js`. It is set up to auto-deploy if you commit, and merge to the `main` branch.
