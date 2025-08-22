@@ -4,6 +4,11 @@
 <p><a href="/admin">Admin Page</a></p>
 <h2>Remark</h2>
 Nothing here is sent to the system - everything is kept on your browser.
+<br>
+<b>The pepper is a pre-set `password` sort of thing. Ask previous webmasters for what it was. It is also stored as an environmental variable on the Amazon AWS account, Lambda function for the intranet.</b>
+
+<!-- CIS Codes -->
+
 <h2>Encrypt: CIS codes</h2>
 <p>
     Here is a way to encrypt all members of the college's CIS codes. Please do it so that one line = one CIS code
@@ -17,9 +22,9 @@ Nothing here is sent to the system - everything is kept on your browser.
 <input id="pepper" placeholder="Pepper">
 <p id="cisError"></p>
 <button onclick="encryptCis()">Encrypt</button>
-
 <script>
-    const cisRegex = /^[a-z]{4}[0-9]{2}$/
+    const cisRegex = /^[a-z]{4}[0-9]{2}$/ // regex will be used in the families section too.
+
     function encryptCis(){
         document.getElementById("cisError").innerHTML = "Loading..."
         const cisTextarea = document.getElementById("cis");
@@ -44,14 +49,60 @@ Nothing here is sent to the system - everything is kept on your browser.
                 document.getElementById("cisError").innerHTML += `<br>${error}`
             }
         }
-
-
     }
-    function saltGenerator(){
+
+    function saltGenerator(){ // function will be used in the families section too.
         let result = "";
         for(var i = 0; i < 32; i++){
             result += Math.floor(Math.random()*16).toString(16);
         }
         return result;
+    }
+</script>
+
+<!-- Families -->
+
+<h2>Encrypt: College Families</h2>
+<p>
+    Here, please do it so that we have on each line: CIS of college child, CIS of parent 1, CIS of parent 2 (optional).
+    <br>
+    For example, if our child is `chil00`, and our two parents are `pare01` and `pare02` (CIS codes), the line for this child will be `chil00,pare01,pare02` (or `chil00,pare02,pare01` works too).
+    <br>
+    If you have it as a CSV file, you could have it so the first column is the child, and the next 2 are of parents. You can save it as a CSV, close it, and instead of opening it, press right click, and `Open as Text` or `Open with Notebook` or `Open with...` and select Notebook. Copy and paste what is in there - it should be in the right format.
+</p>
+<textarea id="families" style="width: 100%; height: 100px;"></textarea>
+<br>
+<input id="pepper2" placeholder="Pepper">
+<p id="familiesError"></p>
+
+<button onclick="encryptFamilies()">Encrypt (Families)</button>
+<script>
+    function encryptFamilies(){
+        document.getElementById("familiesError").innerHTML = "Loading..."
+        const familiesTextarea = document.getElementById("families");
+        const pepper = document.getElementById("pepper2").value;
+        let allowedString = ""; let rejects = [];
+        for(let entry of familiesTextarea.value.split("\n")){
+            let entryColumns = (entry || "").split(",");
+            let child = entryColumns[0]; let parent1 = entryColumns[1]; let parent2 = (entryColumns[2] || "");
+            console.log(child,parent1,parent2)
+            if(cisRegex.test(child) == false || cisRegex.test(parent1) == false || (cisRegex.test(parent2) || !parent2) == false){
+                rejects.push(`Rejected '${entry}' - child, parent 1, or parent 2 cis code invalid (parent2 is optional though)`);
+            } else {
+                let salt = saltGenerator();
+                let stringToEncrypt = salt + child + pepper;
+                let childCisHash = sha256(stringToEncrypt);
+                allowedString += `Hash: ${childCisHash},Salt: ${salt},Parent: ${parent1},Optional Parent: ${parent2}\n`
+            }
+        }
+        familiesTextarea.value = allowedString;
+        if(rejects.length == 0){
+            document.getElementById("familiesError").innerHTML = "Completed with no errors"
+        } else {
+            document.getElementById("familiesError").innerHTML = "Error:"
+            for(let error of rejects){
+                document.getElementById("familiesError").innerHTML += `<br>${error}`
+            }
+        }
     }
 </script>
