@@ -17,7 +17,7 @@
     Information on how to test the system locally, and implement anything, is on the GitHub. Please also note that deployments are made on the `main` branch,
     but you can not commit directly to it - please use a branch, and pull.
 </p>
-<h2>Encryption</h2>
+<h2>Encryption: CIS Codes & College Families</h2>
 <p>
     We require some data to be encrypted. This includes:
     <ul>
@@ -30,7 +30,10 @@
         <li>The encrypted data is what is formed when we encrypt the salt + CIS + pepper. The CIS is all lowercase, the salt is unique to the line, and the pepper is pre-set. Please ask previous webmasters on how to derive this pepper.</li>
         <li>Encryption is done in SHA-256</li>
         <li>For example, let us say our salt for the line is `ca9e6064a3ff4d4d74e6d2434be75426`, our CIS code is `abcd12`, and our pepper is `JoBo`. Then we encrypt the string `ca9e6064a3ff4d4d74e6d2434be75426abcd12JoBo`, to get `77b19f4fb0af2c5f3e845b513c009c1935c6f47d2bb1d8eb93f8e65e0ff596c9` for this line</li>
+        <li><span style="color:red">The pepper must be consistent with what is used in previous years. Webmaster - please consult your handover document.</span></li>
     </ul>
     This <b>must</b> be done by the FACSO or President, before passing it off to the Webmaster to put onto the system - this is because only they are allowed to see a list of CIS codes.
     <br><a href="/admin/encrypt.html">Click here</a> to perform this encryption in the browser.
 </p>
+
+Last updated 07/04/2026. PR.

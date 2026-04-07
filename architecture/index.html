@@ -1,0 +1,222 @@
+<h1>Architecture Manual Pages</h1>
+<p><a href="/">Main Page</a></p>
+<h2>Get Started</h2>
+<p>
+    The architecture of the system may seem complex at first, by looking at the code, but trust me, it is simple.
+    <br><br>
+    Simply put - this system (the intranet, and public website) are all running on a serverless architecture, so:
+</p>
+<ul>
+    <li>AWS Lambda runs the code in nodejs v22.x</li>
+    <li>AWS DynamoDB is the database - as of writing, this includes users who have logged in, and student groups</li>
+    <li>AWS S3 is also storage - but it holds other binaries such as documents, avatars, and even data such as the hashed list of CIS codes</li>
+    <li>AWS SES - send emails</li>
+</ul>
+<p>
+    Everything is in eu-west-2 (London) region. <span style="color: red;">Make sure anything new you ever do is also in eu-west-2 (London)</span> because of GDPR reasons.
+    <br><br>
+    If you need to change this manual however, it is simply GitHub pages. The repository is at <a href="https://github.com/josephinebutlerjcr/manuals">https://github.com/josephinebutlerjcr/manuals</a>.
+</p>
+
+<p style="color: blue;">
+    Want to unpick my entire thought process? Visit the Q&As at <a href="/architecture/qanda.html">/architecture/qanda.html</a>
+</p>
+
+<h2>AWS Lambda</h2>
+
+<p>
+    Simply put, you do not need to touch the Amazon AWS Lambda functions, unless the version is deprecated. If so, just google how to change the versions around 
+    (I am not gatekeeping this from you - AWS keep changing around their UI, and by the time you need to change it, it will probably change - it is annoying).
+    <br><br>
+    But, there are two functions:
+</p>
+<ul>
+    <li>internal-website</li>
+    <li>public-website</li>
+</ul>
+
+<p>There are also two repositories:</p>
+<ul>
+    <li><a href="https://github.com/josephinebutlerjcr/intranet">https://github.com/josephinebutlerjcr/intranet</a></li>
+    <li><a href="https://github.com/josephinebutlerjcr/public-website">https://github.com/josephinebutlerjcr/public-website</a></li>
+</ul>
+
+<p>
+    Coincidence? I think not! They correlate - and any commits to the main branch will directly update the Lambda functions.
+    <br><br>
+    This is why you should NEVER commit directly to the main branch - make a separate branch, do stuff, and merge it. If you are a volunteer,
+    this is where the webmaster can check your code is in order.
+    <br><br>
+    More on the code structure <a href="/codestructure">here</a>.
+</p>
+
+<h2>AWS DynamoDB</h2>
+
+As of writing, there are two databases.
+
+<h3>users</h3>
+
+This database ("users") contains the details of each individual - they must be logged onto the system for a record to be generated.
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-1wig{font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-1wig">Key</th>
+    <th class="tg-0lax"><span style="font-weight:bold">Data Type</span></th>
+    <th class="tg-1wig">Remarks</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">cis</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Partition Key. CIS code of user</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">generated</td>
+    <td class="tg-0lax">Integer</td>
+    <td class="tg-0lax">Unix time of the first time the account was generated. This is the number of seconds from 01/01/1970 00:00 UTC+0</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">login</td>
+    <td class="tg-0lax">Object</td>
+    <td class="tg-0lax">An object of: attempts (integer) (number of consecutive failed sign in attempts), attemptsOnCode (integer) (number of consecutive failed sign in attempts on the code), code (string) (6 digit login code), and generated (integer) (unix time of when the code was generated - may be -1 instead to denote expiry)</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">membership</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Currently not in use - just write default "N/R"</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">name</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Name of the user - they can write it in / edit</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">privilege</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Takes on: general, exec, chair, admin - different access levels in ascending order of authority</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">token</td>
+    <td class="tg-0lax">Object</td>
+    <td class="tg-0lax">The current token they are signed in on. An object of: exp (integer) (expiry of token in unix time - may be -1 to denote the user has signed out manually), and key (string) (32 digit hexadecimal token)</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">newUser</td>
+    <td class="tg-0lax">Boolean</td>
+    <td class="tg-0lax">A flag to denote if the person is new / not properly logged in yet - perhaps due to them signing in but not entering the code in their emails, or the account being force made as they are in the exec. This field is optional - if blank, assumed false.</td>
+  </tr>
+</tbody></table>
+
+<h3>groups</h3>
+
+<p>
+    This database ("groups") contains the details of each JCR student group. I call it "student group" instead of "SSC" (sport, society and committees), just because screw having yet another
+    abbreviation.
+    <br><br>
+    Now, the id was a slug generated from the original category and name, where the category got truncated to the first 3 letters, and then names and spaces are in lower case and have a dash (-) in lieu of a space.
+    <br><br>
+    For example, the Netball group (sport) would become spo-netball. Likewise, the technical committee would be com-technical-committee.
+</p>
+
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-1wig">Key</th>
+    <th class="tg-0lax"><span style="font-weight:bold">Data Type</span></th>
+    <th class="tg-1wig">Remarks</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">id</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Partition Key. The slug I just told you about.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">admins</td>
+    <td class="tg-0lax">Object</td>
+    <td class="tg-0lax">Unix time of the first time the account was generated. This is the number of seconds from 01/01/1970 00:00 UTC+0</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">avatar</td>
+    <td class="tg-0lax">Boolean</td>
+    <td class="tg-0lax">Flags whether or not an avatar for the student group exists.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">awards</td>
+    <td class="tg-0lax">List of Strings</td>
+    <td class="tg-0lax">List of any awards the society has - can be an empty list.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">category</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Self-explanatory. Takes on: sport, committee, society</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">description</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">Self-explanatory.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">events</td>
+    <td class="tg-0lax">List of Objects</td>
+    <td class="tg-0lax">Currently a blank list for all societies because I have not implemented a DU-Pulse style thing - although their website doesn't work for societies! Ideal for calendars.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">name</td>
+    <td class="tg-0lax">String</td>
+    <td class="tg-0lax">The name of the society.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">socials</td>
+    <td class="tg-0lax">Object</td>
+    <td class="tg-0lax">Can be blank. All values are strings. Keys: "instagram" (Instagram username without handle e.g. @butler.slackline to butler.slackline), "whatsapp" is the WhatsApp invite link without the rest of the URL e.g https://chat.whatsapp.com/123/ --&gt; 123</td>
+  </tr>
+</tbody></table>
+
+<h2>AWS S3</h2>
+
+<p>There are two buckets:</p>
+
+<ul>
+    <li>butler-jcr</li>
+    <li>butler-jcr-public</li>
+</ul>
+
+<p> 
+    The key difference is, anything in butler-jcr-public can be viewed anywhere on the internet, without needing a presigned key, in the form butler-jcr-public.s3.eu-west-2.amazonaws.com/path/to/file.ext,
+    for example <a href="https://butler-jcr-public.s3.eu-west-2.amazonaws.com/avatars/0.jpg">https://butler-jcr-public.s3.eu-west-2.amazonaws.com/avatars/0.jpg</a>.
+</p>
+
+<h3>butler-jcr</h3>
+
+<p>
+    This includes anything not available to the public - at least not without a presigned URL. In this I have saved:
+    <ul>
+        <li>Executive data - roll mapping, and individual biographies - both as a json</li>
+        <li>Family data - currently empty as I have done nout here but the intention was a bunch of jsons</li>
+        <li>List of hashed CIS codes - its in the root as "hashed_db.txt" - you must change the contents of this file with anything new sent from the FACSO. This file is important as it includes all members in the college, and is used to ensure first-time sign ons are only for this college. At the beginning of the year, please get your FACSO/President to follow the instructions in <a href="/admin/encrypt.html">/admin/encrypt.html</a>. Please consult your handover for the pepper.</a></li>
+        <li>Audit logs - e.g. for uploads and changes to data - you must keep some sort of log ideally of stuff.</li>
+    </ul>
+</p>
+
+<h3>butler-jcr-public</h3>
+
+<p>
+    Now this includes stuff you would not mind being seen by the public. Usually, the content for the public website e.g. images should be uploaded here and then you link to these, but it also includes data accessible in the intranet. Stuff here include:
+    <ul>
+        <li>Avatars - for both student groups, and exec members (for the latter, only the photos of the pres/FACSO is displayed on the public website)</li>
+        <li>Democracy documents</li>
+        <li>Policies and governance documents</li>
+        <li>Other public facing websire related uploads (done manually) - assets (e.g. logos), photos of limited events, and freshers week stuff.</li>
+    </ul>
+</p>
+
+Last updated 07/04/2026. PR.

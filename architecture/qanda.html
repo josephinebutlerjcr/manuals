@@ -1,0 +1,130 @@
+<h1>Thought Process Pages</h1>
+<p><a href="/">Main Page</a></p>
+<h2>How to use this</h2>
+<p>
+    You: How do I use this?
+    <br>
+    Prem: <i>I have set out separate sections, some through my thought process of the entire architecture, some through particular features. See the section header and go through it. <span style="color:red">I don't expect you to read all this waffle.</span> Though, I will put things important in red.</i>
+</p>
+<p>
+    You: Why have you structured it like a conversation?
+    <br>
+    Prem: <i>Thought it'd be funny. It helps to know who said the answer though, so if any of my successors (you) make something brand new, then add stuff in your name! Actually - fun fact, one of my modules (COMP2261, Artificial Intelligence) had a coursework where the Q&As were structured like this - although hilarious, it was effective. Another fun fact - I am (trying to get the Faculty Office to) let me transfer out of Natural Science to Maths.</i>
+</p>
+<p>
+    You: I can't see anything in the manual - what can I do?
+    <br>
+    Prem: <i><span style="font-size: xx-large;">Zoom In</span></i>
+</p>
+
+<h2>I don't have much technical knowledge - what do I need to do?</h2>
+<p>
+    You: How much technical knowledge do I need to be webmaster?
+    <br>
+    Prem: <i><span style="color: red;">You don't have to know how the backend works to be webmaster</span>. I have designed the system,
+    such that the majority of its maintenance can be done simply - just by being given permissions. A lot of stuff requires accurate data.
+    In those cases, either it is you entering the correct CIS codes of exec members (<a href="https://josephine.butlerjcr.com/">Intranet</a> >> Exec Portal >> <a href="https://josephine.butlerjcr.com/exec/members">Positions Editor</a>),
+    by making sure the data of the student groups are accurate (<a href="https://josephine.butlerjcr.com/">Intranet</a> >> Exec Portal >> <a href="https://josephine.butlerjcr.com/exec/groups">Groups Registry</a>).
+    Though - dump the responsibility of these on the JCR Vice President (who deals with committees), the JCR Sports Officer, and the JCR Society Officer (what they oversee is obvious).
+    </i>
+</p>
+<p>
+    You: Wait, so do I ever need to touch any code, or do any wizardry?
+    <br>
+    Prem: <i>
+        Well.... the good news is a lot of things can be managed through the intranet portal - heck, the exec members themselves get to edit their profiles, and group leaders get to do so for their grouo - and
+        the image, bio, and name the president and FACSO put for themselves will be reflected to the full website automatically, there will still be some aspects. The following questions will solve them.
+    </i>
+</p>
+<p>
+    You: So, what do I need to change in terms of code?
+    <br>
+    Prem: <i>
+        Well, unless a better way has been done, you may need to edit the welfare pages (<a href="https://www.butlerjcr.com/welfare">https://www.butlerjcr.com/welfare</a>)
+        and the freshers page (<a href="https://www.butlerjcr.com/freshers">https://www.butlerjcr.com/freshers</a>) manually. If you know HTML that is great, because
+        what you need to do is go to the GitHub repository (<a href="https://github.com/josephinebutlerjcr/public-website">https://github.com/josephinebutlerjcr/public-website</a>),
+        navigate to "assets", then "html", and then find the relevant page, e.g. "welfare.html", and press "edit this file". You can then manipulate the HTML. This should be straight forward
+        if you are changing a few words. Unless you are certain for what you are doing, do not touch anything outside of this folder, however.
+        <br><br>
+        Also, after you have done editting, press the green "Commit changes" button - if you are confident all the words you put in are correct / not mispelt. Then,
+        you will get the option to write a commit message (just a brief title, e.g. "changed for freshers 2026"), and then select "Commit directly to the main branch" and "Bypass rules and commit changes".
+        If you do not get this option, refer to the next question.
+    </i>
+</p>
+<p>
+    You: Wait, what is GitHub?
+    <br>
+    Prem: <i>
+        Ah - sorry - forgot to mention. It is basically like Google Drive / DropBox / cloud storage but for code. You will need a GitHub account, which you should be able to make easily,
+        and you will need to get the previous webmaster to add you onto the organisation. 
+        <br>
+        You may however experience problems when making edits.
+        If you can not "commit directly to the main branch" you can keep the other option of "create a new branch for this commit" and then press the commit button, and then get
+        the previous webmaster to accept the pull request, and indeed, to let you make changes.
+    </i>
+</p>
+<p>
+    You: AAAAAA
+    <br>
+    Prem: <i>
+        No worries - if this scares you, just ask a previous webmaster for help. Heck - reach out to me. I hope I still have access to the GitHub organisation just in case, unless a future webmaster kicks me off!
+        <br>
+        My website is <a href="https://premraghvani.com/">here</a>, and LinkedIn is <a href="https://www.linkedin.com/in/premraghvani/">here</a>.
+    </i>
+</p>
+<p>
+    You: What other witchcraft is in store?
+    <br>
+    Prem: <i>
+        Also, at the beginning of the academic year, it is important to get the CIS codes of all college members refreshed - to let the freshers sign in.
+        <br>
+        You will have a "Pepper" in your handover. Get that.
+        <br>
+        Get your President or FACSO to follow the instructions at <a href="/admin/encrypt.html">/admin/encrypt.html</a>, giving them the pepper.
+        <br>
+        Then, get whatever you get back, put it in a text file, making sure each entry is in one line, i.e. "Hash: .....,Salt: ....." is on each line, and there are no blank lines. Rename this to "hashed_db", or if your file extension shows, make sure its "hashed_db.txt"
+        <br>
+        Then, go onto the Amazon AWS, log in (you have instructions for this in your handover), when logged in locate S3, then chose "butler-jcr", and here press the "Upload" button, and upload what is there.
+        <br>
+        Again, if there are issues, you could ask a previous webmaster, but it may be harder for them to do the upload - but they may be able to talk you through it. Myself included.
+    </i>
+</p>
+<p>
+    You: Any more essential witchcraft?
+    <br>
+    Prem: <i>No</i>
+</p>
+<p>
+    You: I have a volunteer, who wants to make a feature. What can I do.
+    <br>
+    Prem: <i>Well, if you are not technical yourself, send them these, they can make something, and ask someone else to assess and accept their pull requests. Again, that person could be me or any of your former webmasters.</i>
+</p>
+<p>
+    You: I am bored of you talking to me like I don't know what I'm doing - can we change subjects?
+    <br>
+    Prem: <i>Okay.</i>
+</p>
+
+<h2>Why The Design Choice?</h2>
+<p>
+    You: There was a previous website - why did you change it fully?
+    <br>
+    Prem: <i>
+        The former website was good, a lot of which inspired what is going on here (thanks Ned!) - however when the former webmaster, Ned, graduated, he still had to do a lot of work to change things. Then, I came in. But, given
+        I was a fresher (at the time), I decided, you know what, let's address some inefficiencies. For one, I changed the entire structure, from it running on a server,
+        to a serverless architecture - because paying for a constant server was expensive. For the 2 of you who actually use the JCR website, that means the server is mostly
+        dormant. Hence, serverless. It saves us so much money!
+    </i>
+</p>
+<p>
+    You: But, what about storing photos?
+    <br>
+    Prem: <i>
+        Yes, I did have the debate with Ned (the previous webmaster), and that was, at the time, the weakness to my structure - S3 costs tend to be higher.<br>
+        However - I decided to still go ahead with my idea, since no one even uploaded photos to the website.<br>
+        Since then, in my capacity as CGO (but also webmaster), I got us the free Google Workspace as a charity. This includes a LOT of storage for photos, on Google Photos. The UI for Google Photos is amazing. We can now hoard our photos there!
+    </i>
+</p>
+
+
+Last updated 07/04/2026. PR.
